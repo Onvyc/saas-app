@@ -2,6 +2,7 @@ import {Button} from "@/components/ui/button"
 import CompanionCard from "@/components/ui/CompanionCard"
 import CompanionList from "@/components/ui/CompanionsList"
 import CTA from "@/components/ui/CTA"
+import { recentSessions } from "@/constants"
 
 export default function Page() {
   return (
@@ -37,7 +38,11 @@ export default function Page() {
           </section>
 
           <section className="home-section">
-            <CompanionList/>
+            <CompanionList
+              title="Recently completed sessions"
+              companions={recentSessions}
+              classNames="w-2/3 max-lg:w-full"
+            />
             <CTA />
           </section>
 
