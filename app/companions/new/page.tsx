@@ -1,13 +1,19 @@
-import CompanionForm from "@/components/ui/CompanionForm";
+import CompanionForm from '@/components/ui/CompanionForm';
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
-export default function NewCompanion() {
-    return(
-        <main className="min-lg:w1/3 min-md:w2/3 items-center justify-center">
-            <article className="w-full gap-4 flex flex-col">
-                <h1>Companion Builder</h1>
+export default async function NewCompanion() {
+  const { userId } = await auth();
 
-                <CompanionForm />
-            </article>
-        </main>
-    )
+  if (!userId) redirect('/sign-in');
+
+  return (
+    <main className="min-lg:w1/3 min-md:w2/3 items-center justify-center">
+      <article className="w-full gap-4 flex flex-col">
+        <h1>Companion Builder</h1>
+
+        <CompanionForm />
+      </article>
+    </main>
+  );
 }
