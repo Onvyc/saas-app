@@ -5,17 +5,20 @@ import createSupabaseClient from '@/lib/supabase';
 
 export default async function createCompanion(formData: CreateCompanion) {
   const { userId: author } = await auth();
+  if (!author) throw new Error('Not authenticated');
+
   const supabase = await createSupabaseClient();
 
   const { data, error } = await supabase
     .from('companions')
     .insert({ ...formData, author })
-    .select();
+    .select()
+    .single();
 
   if (error || !data)
     throw new Error(error?.message || 'Failed to create a companion');
 
-  return data[0];
+  return data;
 }
 
 export async function getAllCompanions({
@@ -53,9 +56,10 @@ export async function getCompanion(id: string) {
   const { data, error } = await supabase
     .from('companions')
     .select()
-    .eq('id', id);
+    .eq('id', id)
+    .single();
 
   if (error) return console.log(error);
 
-  return data[0];
+  return data;
 }

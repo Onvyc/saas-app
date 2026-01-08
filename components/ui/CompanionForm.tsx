@@ -1,6 +1,5 @@
 'use client';
-
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,7 +24,7 @@ import { subjects } from '@/constants';
 import createCompanion from '@/lib/actions/companion.actions';
 
 const formSchema = z.object({
-  username: z.string().min(2, { message: 'Companion is required.' }),
+  name: z.string().min(2, { message: 'Companion is required.' }),
   subject: z.string().min(2, { message: 'Subject is required.' }),
   topic: z.string().min(2, { message: 'Topic is required.' }),
   voice: z.string().min(2, { message: 'Voice is required.' }),
@@ -34,11 +33,12 @@ const formSchema = z.object({
 });
 
 export default function CompanionForm() {
-  // 1. Define your form.
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      name: '',
       subject: '',
       topic: '',
       voice: '',
@@ -47,16 +47,15 @@ export default function CompanionForm() {
     },
   });
 
-  // 2. Define a submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const companion = await createCompanion(values);
 
-    if (companion) {
-      redirect(`/companions/${companion.id}`);
-    } else {
-      console.log('Failed to create a companion');
-      redirect('/');
+    if (companion?.id) {
+      router.push(`/companions/${companion.id}`);
+      return;
     }
+    console.log('Failed to create a companion');
+    router.push('/');
   };
 
   return (
@@ -64,7 +63,7 @@ export default function CompanionForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Companion name</FormLabel>
