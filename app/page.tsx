@@ -5,6 +5,8 @@ import { getAllCompanions } from '@/lib/actions/companion.actions';
 import { getRecentSessions } from '@/lib/actions/companion.actions';
 import { getSubjectColor } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const companions = await getAllCompanions({ limit: 3 });
   const recentSessionsCompanions = await getRecentSessions(10);
