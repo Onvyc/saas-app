@@ -63,3 +63,41 @@ export async function getCompanion(id: string) {
 
   return data;
 }
+
+export async function addToSessionHistory(companionId: string) {
+  const { userId } = await auth();
+  const supabase = await createSupabaseClient();
+
+  const { data, error } = await supabase
+    .from('session_history')
+    .insert({ companionId, userId });
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
+export async function getRecentSessions(limit = 10) {
+  const supabase = await createSupabaseClient();
+  const { data, error } = await supabase
+    .from('session_history')
+    .select(`companions:companion_id (*)`)
+    .order('created_at')
+    .limit(limit);
+
+  if (error) throw new Error(error.message);
+}
+
+export async function getUserSessions(userId: string, limit = 10) {
+  const supabase = await createSupabaseClient();
+  const { data, error } = await supabase
+    .from('session_history')
+    .select(`companions:companion_id (*)`)
+    .eq('iser_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) throw new Error(error.message);
+
+  return data.map(({ companions }) => companions);
+}
