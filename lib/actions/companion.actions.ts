@@ -93,11 +93,23 @@ export async function getUserSessions(userId: string, limit = 10) {
   const { data, error } = await supabase
     .from('session_history')
     .select(`companions:companion_id (*)`)
-    .eq('iser_id', userId)
+    .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit);
 
   if (error) throw new Error(error.message);
 
   return data.map(({ companions }) => companions);
+}
+
+export async function getUserCompanions(userId: string) {
+  const supabase = await createSupabaseClient();
+  const { data, error } = await supabase
+    .from('companions')
+    .select()
+    .eq('author', userId);
+
+  if (error) throw new Error(error.message);
+
+  return data;
 }

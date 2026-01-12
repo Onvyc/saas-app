@@ -6,13 +6,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
 
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import Image from "next/image";
-import { getSubjectColor } from "@/lib/utils";
-import { IMAGES_MANIFEST } from "next/dist/shared/lib/constants";
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import Image from 'next/image';
+import { getSubjectColor } from '@/lib/utils';
 
 interface ComapionsListProps {
   title: string;
@@ -20,10 +19,16 @@ interface ComapionsListProps {
   classNames?: string;
 }
 
-export default function CompanionList({title, companions, classNames}: ComapionsListProps) {
-  return(
-    <article className={cn( 'companion-list', classNames)}>
-      <h2 className="font-bold text-3xl">Recent Sessions</h2>
+export default function CompanionsList({
+  title,
+  companions,
+  classNames,
+}: ComapionsListProps) {
+  console.log('companions type:', typeof companions, companions);
+
+  return (
+    <article className={cn('companion-list', classNames)}>
+      <h2 className="font-bold text-3xl">{title}</h2>
       <Table>
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
@@ -34,53 +39,50 @@ export default function CompanionList({title, companions, classNames}: Comapions
           </TableRow>
         </TableHeader>
         <TableBody>
-          {companions?.map(({id, subject, name, topic, duration}) => (
+          {companions?.map(({ id, subject, name, topic, duration }) => (
             <TableRow key={id}>
               <TableCell>
                 <Link href={`/companions/${id}`}>
                   <div className="flex items-center gap-2">
-                    <div className="size-18 flex items-center justify-center rounded-lg max-md:hidden" style={{backgroundColor: getSubjectColor(subject)}}>
-                      <Image 
-                        src={`/icons/${subject}.svg`} 
-                        alt={subject} 
+                    <div
+                      className="size-18 flex items-center justify-center rounded-lg max-md:hidden"
+                      style={{ backgroundColor: getSubjectColor(subject) }}
+                    >
+                      <Image
+                        src={`/icons/${subject}.svg`}
+                        alt={subject}
                         width={35}
                         height={35}
                       />
                     </div>
                     <div className="flex flex-col gap-2">
-                      <p className="font-bold text-2xl">
-                        {name}
-                      </p>
-                      <p className="text-lg">
-                        {topic}
-                      </p>
+                      <p className="font-bold text-2xl">{name}</p>
+                      <p className="text-lg">{topic}</p>
                     </div>
                   </div>
                 </Link>
               </TableCell>
               <TableCell>
-                <div className="subjec-badge w-fit">
-                  {subject}
-                </div>
-                <div className="flex items-center justify-center rounded-lg w-fit p-2 md:hidden" style={{backgroundColor: getSubjectColor(subject)}}>
-                  <Image 
-                    src={`/icons/${subject}.svg`} 
+                <div className="subjec-badge w-fit">{subject}</div>
+                <div
+                  className="flex items-center justify-center rounded-lg w-fit p-2 md:hidden"
+                  style={{ backgroundColor: getSubjectColor(subject) }}
+                >
+                  <Image
+                    src={`/icons/${subject}.svg`}
                     alt={subject}
                     width={18}
                     height={18}
-                  /> 
+                  />
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2 w-full justify-end">
                   <p className="text-2xl">
-                    {duration} {' '}
-                    <span className="text-2xl">
-                      mins
-                    </span>
+                    {duration} <span className="text-2xl">mins</span>
                   </p>
-                  <Image 
-                    src={`/icons/clock.svg`} 
+                  <Image
+                    src={`/icons/clock.svg`}
                     alt="minutes"
                     width={14}
                     height={14}
@@ -93,5 +95,5 @@ export default function CompanionList({title, companions, classNames}: Comapions
         </TableBody>
       </Table>
     </article>
-  )
+  );
 }

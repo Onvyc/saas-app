@@ -154,7 +154,11 @@ export default function CompanionComponent({
           <div className="user-avatar">
             <Image
               src={userImage}
-              alt={userName}
+              alt={
+                userName
+                  ? `${userName} profile picture`
+                  : 'User profile picture'
+              }
               width={130}
               height={130}
               className="rounded-lg"
@@ -195,16 +199,18 @@ export default function CompanionComponent({
               if (message.role === 'assistant') {
                 return (
                   <p key={message.content} className="max-sm:text-sm">
-                    {name.split(' ')[0].replace('/[.,]/g', '')}:{' '}
+                    {name.split(' ')[0].replace(/[.,]/g, '')}:{message.content}
                   </p>
                 );
               } else {
-                <p
-                  key={message.content}
-                  className="text-primary max-sm:text-sm"
-                >
-                  {userName}: {message.content}
-                </p>;
+                return (
+                  <p
+                    key={message.content}
+                    className="text-primary max-sm:text-sm"
+                  >
+                    {userName}: {message.content}
+                  </p>
+                );
               }
             })}
           </div>
